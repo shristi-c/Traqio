@@ -39,10 +39,27 @@ export const login = (email, password) => {
 };
 
 // Google Sign In
+// Google Sign In
 const googleProvider = new GoogleAuthProvider();
 
-export const googleSignIn = () => {
-  return signInWithPopup(auth, googleProvider);
+export const googleSignIn = async () => {
+  const result = await signInWithPopup(auth, googleProvider);
+
+  const user = result.user;
+
+  await setDoc(
+    doc(db, "users", user.uid),
+    {
+      uid: user.uid,
+      name: user.displayName,
+      email: user.email,
+      role: "user",
+      createdAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+
+  return result;
 };
 
 // Logout

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../../services/authService";
+import { googleSignIn } from "../../services/authService";
 
 function Login() {
   const navigate = useNavigate();
@@ -26,6 +27,7 @@ function Login() {
     setError("");
     setLoading(true);
 
+    
     try {
       await login(formData.email, formData.password);
 
@@ -37,6 +39,16 @@ function Login() {
       setLoading(false);
     }
   };
+  
+ const handleGoogleLogin = async () => {
+  try {
+    await googleSignIn();
+    navigate("/dashboard");
+  } catch (error) {
+    console.error(error);
+    setError("Google Sign-In failed.");
+  }
+};
 
   return (
     <div className="min-h-screen flex items-center justify-center">
@@ -89,6 +101,14 @@ function Login() {
         >
           {loading ? "Logging in..." : "Login"}
         </button>
+  
+  <button
+  type="button"
+  onClick={handleGoogleLogin}
+  className="w-full border p-2 rounded mt-3"
+>
+  Continue with Google
+</button>
 
         <p className="text-center text-sm">
           Don't have an account?{" "}
