@@ -73,7 +73,15 @@ function Login() {
           className="w-full border rounded p-2"
           required
         />
-
+        
+      <div className="text-right">
+  <Link
+    to="/forgot-password"
+    className="text-sm text-blue-600 hover:underline"
+  >
+    Forgot Password?
+  </Link>
+</div>
         <button
           type="submit"
           disabled={loading}
