@@ -1,16 +1,18 @@
+import { logout } from "../../services/authService";
 import { useAuth } from "../../context/AuthContext";
 
 function Dashboard() {
-  const { user, loading } = useAuth();
-
-  if (loading) {
-    return <h2>Loading...</h2>;
-  }
+  const { user } = useAuth();
 
   return (
     <div>
       <h1>Dashboard</h1>
-      <p>{user ? user.email : "No user logged in"}</p>
+
+      <p>{user?.email}</p>
+
+      <button onClick={logout}>
+        Logout
+      </button>
     </div>
   );
 }
