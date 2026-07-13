@@ -1,16 +1,29 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/firebase";
+import { getUserProfile } from "../services/userService";
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+  const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setLoading(true);
+
+      if (currentUser) {
+        setUser(currentUser);
+
+        const profile = await getUserProfile(currentUser.uid);
+        setUserData(profile);
+      } else {
+        setUser(null);
+        setUserData(null);
+      }
+
       setLoading(false);
     });
 
@@ -18,7 +31,13 @@ export function AuthProvider({ children }) {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user, loading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        userData,
+        loading,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
