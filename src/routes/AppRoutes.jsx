@@ -7,7 +7,11 @@ import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 
 import DashboardLayout from "../pages/Dashboard/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
-
+import Applications from "../pages/Applications/Applications";
+import Analytics from "../pages/Analytics/Analytics";
+import Interviews from "../pages/Interviews/Interviews";
+import Profile from "../pages/Profile/Profile";
+import Settings from "../pages/Settings/Settings";
 import PublicRoute from "../components/Common/PublicRoute";
 import ProtectedRoute from "../components/Common/ProtectedRoute";
 
@@ -57,6 +61,31 @@ function AppRoutes() {
         >
           
           <Route index element={<DashboardHome />} />
+          <Route
+                path="applications"
+               element={<Applications />}
+               />
+
+                                 
+<Route
+  path="analytics"
+  element={<Analytics />}
+/>
+
+<Route
+  path="interviews"
+  element={<Interviews />}
+/>
+
+<Route
+  path="profile"
+  element={<Profile />}
+/>
+
+<Route
+  path="settings"
+  element={<Settings />}
+/>
         </Route>
       </Routes>
     </BrowserRouter>
