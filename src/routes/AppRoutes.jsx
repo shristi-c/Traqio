@@ -7,7 +7,8 @@ import ForgotPassword from "../pages/ForgotPassword/ForgotPassword";
 
 import DashboardLayout from "../pages/Dashboard/DashboardLayout";
 import DashboardHome from "../pages/Dashboard/DashboardHome";
-import Applications from "../pages/Applications/Applications";
+import Applications from "../pages/Application/Applications";
+import NewApplication from "../pages/Application/NewApplication";
 import Analytics from "../pages/Analytics/Analytics";
 import Interviews from "../pages/Interviews/Interviews";
 import Profile from "../pages/Profile/Profile";
@@ -65,7 +66,10 @@ function AppRoutes() {
                 path="applications"
                element={<Applications />}
                />
-
+   <Route
+    path="applications/new"
+    element={<NewApplication />}
+/>
                                  
 <Route
   path="analytics"
