@@ -27,8 +27,7 @@ const jobTypeOptions = [
 const NewApplication = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  console.log("Current UID:", user?.uid);
-console.log("Current Email:", user?.email);
+
 
   const [formData, setFormData] = useState({
     company: "",
