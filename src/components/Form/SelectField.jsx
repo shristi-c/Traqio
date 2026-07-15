@@ -4,6 +4,7 @@ const SelectField = ({
   value,
   onChange,
   options = [],
+  error,
 }) => {
   return (
     <div className="flex flex-col gap-2">
@@ -25,6 +26,11 @@ const SelectField = ({
           </option>
         ))}
       </select>
+      {error && (
+  <p className="text-sm text-red-500">
+    {error}
+  </p>
+)}
     </div>
   );
 };
