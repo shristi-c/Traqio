@@ -1,11 +1,12 @@
-import { useState } from "react";
+
+
 
 
 import InputField from "../Form/InputField";
 import SelectField from "../Form/SelectField";
 import TextAreaField from "../Form/TextAreaField";
 
-import { validateApplication } from "../../utils/validation";
+
 
 const statusOptions = [
   { value: "Applied", label: "Applied" },
@@ -22,81 +23,37 @@ const jobTypeOptions = [
   { value: "Contract", label: "Contract" },
 ];
 
-const defaultValues = {
-  company: "",
-  jobTitle: "",
-  status: "",
-  location: "",
-  jobType: "",
-  salary: "",
-  appliedDate: "",
-  jobLink: "",
-  notes: "",
-};
+
 
 function ApplicationForm({
-  initialValues = defaultValues,
+  formData,
+  setFormData,
+  errors,
+  isSubmitting,
   onSubmit,
   onCancel,
   submitButtonText = "Save Application",
-})  {
+}) {
   
 
-  const [formData, setFormData] = useState(initialValues);
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+ 
 
-  const isFormDirty = Object.values(formData).some(
-    (value) => value.toString().trim() !== ""
-  );
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
+  const { name, value } = e.target;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const validationErrors = validateApplication(formData);
-
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-
-    setErrors({});
-
-    try {
-      setIsSubmitting(true);
-
-      await onSubmit(formData);
-    } catch (error) {
-      console.error(error);
-      alert("Something went wrong.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
-
- const handleCancel = () => {
-  if (!isFormDirty) {
-    onCancel();
-    return;
-  }
-
-  const confirmDiscard = window.confirm(
-    "You have unsaved changes. Are you sure you want to discard them?"
-  );
-
-  if (confirmDiscard) {
-    onCancel();
-  }
+  setFormData((prev) => ({
+    ...prev,
+    [name]: value,
+  }));
 };
+
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  onSubmit(e);
+};
+
+ 
 
   return (
     <div className="rounded-xl bg-white p-6 shadow">
@@ -185,7 +142,7 @@ function ApplicationForm({
         <div className="flex justify-end gap-4">
           <button
             type="button"
-            onClick={handleCancel}
+            onClick={onCancel}
             className="rounded-lg border border-gray-300 px-5 py-2.5 font-medium transition hover:bg-gray-100"
           >
             Cancel
