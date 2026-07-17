@@ -142,3 +142,46 @@ export const deleteJob = async (uid, jobId) => {
     throw error;
   }
 };
+
+/**
+ * Fetch dashboard statistics
+ */
+export const getDashboardStats = async (uid) => {
+  try {
+    const applications = await getJobs(uid);
+
+    const totalApplications = applications.length;
+
+    const interviews = applications.filter(
+      (job) => job.status === "Interview"
+    ).length;
+
+    const offers = applications.filter(
+      (job) => job.status === "Offer"
+    ).length;
+
+    const rejections = applications.filter(
+      (job) => job.status === "Rejected"
+    ).length;
+
+    const responseRate =
+      totalApplications === 0
+        ? 0
+        : Math.round(
+            ((interviews + offers + rejections) /
+              totalApplications) *
+              100
+          );
+
+    return {
+      totalApplications,
+      interviews,
+      offers,
+      rejections,
+      responseRate,
+    };
+  } catch (error) {
+    console.error("Error fetching dashboard stats:", error);
+    throw error;
+  }
+};
