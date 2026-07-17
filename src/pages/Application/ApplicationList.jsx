@@ -3,6 +3,8 @@ import { getJobs } from "../../services/jobService";
 import { useAuth } from "../../context/AuthContext";
 import ApplicationCard from "./ApplicationCard";
 import EmptyState from "./EmptyState";
+import { deleteJob } from "../../services/jobService";
+
 
 function ApplicationList() {
   const { user } = useAuth();
@@ -30,6 +32,24 @@ function ApplicationList() {
     fetchApplications();
   }, [user]);
 
+  const handleDelete = async (jobId) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this application?"
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    await deleteJob(user.uid, jobId);
+
+    setApplications((prev) =>
+      prev.filter((job) => job.id !== jobId)
+    );
+  } catch (error) {
+    console.error(error);
+    alert("Failed to delete application.");
+  }
+};
   if (loading) {
     return (
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 text-center">
@@ -46,9 +66,10 @@ function ApplicationList() {
     <div className="grid gap-6">
       {applications.map((application) => (
         <ApplicationCard
-          key={application.id}
-          application={application}
-        />
+  key={application.id}
+  application={application}
+  onDelete={handleDelete}
+/>
       ))}
     </div>
   );

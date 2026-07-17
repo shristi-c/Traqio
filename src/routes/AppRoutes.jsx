@@ -15,6 +15,8 @@ import Profile from "../pages/Profile/Profile";
 import Settings from "../pages/Settings/Settings";
 import PublicRoute from "../components/Common/PublicRoute";
 import ProtectedRoute from "../components/Common/ProtectedRoute";
+import ApplicationDetails from "../pages/Application/ApplicationDetails";
+import EditApplication from "../pages/Application/EditApplication";
 
 function AppRoutes() {
   return (
@@ -70,7 +72,16 @@ function AppRoutes() {
     path="applications/new"
     element={<NewApplication />}
 />
-                                 
+<Route
+  path="applications/:id"
+  element={<ApplicationDetails />}
+/>
+
+                           <Route
+  path="applications/:id/edit"
+  element={<EditApplication />}
+/>
+      
 <Route
   path="analytics"
   element={<Analytics />}

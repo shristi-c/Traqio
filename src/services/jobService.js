@@ -1,19 +1,20 @@
 import {
   addDoc,
   collection,
+  doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
   serverTimestamp,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
+
 import { db } from "../firebase/firebase";
 
 /**
- * Add a new job application for a user.
- *
- * @param {string} uid - Authenticated user's UID
- * @param {Object} applicationData - Form data
- * @returns {Promise<string>} Newly created document ID
+ * Add a new job application
  */
 export const addJob = async (uid, applicationData) => {
   try {
@@ -38,10 +39,7 @@ export const addJob = async (uid, applicationData) => {
 };
 
 /**
- * Fetch all job applications for a user.
- *
- * @param {string} uid - Authenticated user's UID
- * @returns {Promise<Array>} List of job applications
+ * Fetch all applications
  */
 export const getJobs = async (uid) => {
   try {
@@ -65,6 +63,82 @@ export const getJobs = async (uid) => {
     }));
   } catch (error) {
     console.error("Error fetching applications:", error);
+    throw error;
+  }
+};
+
+/**
+ * Fetch a single application
+ */
+export const getJobById = async (uid, jobId) => {
+  try {
+    const jobRef = doc(
+      db,
+      "users",
+      uid,
+      "applications",
+      jobId
+    );
+
+    const snapshot = await getDoc(jobRef);
+
+    if (!snapshot.exists()) {
+      throw new Error("Application not found.");
+    }
+
+    return {
+      id: snapshot.id,
+      ...snapshot.data(),
+    };
+  } catch (error) {
+    console.error("Error fetching application:", error);
+    throw error;
+  }
+};
+
+/**
+ * Update an application
+ */
+export const updateJob = async (
+  uid,
+  jobId,
+  applicationData
+) => {
+  try {
+    const jobRef = doc(
+      db,
+      "users",
+      uid,
+      "applications",
+      jobId
+    );
+
+    await updateDoc(jobRef, {
+      ...applicationData,
+      updatedAt: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Error updating application:", error);
+    throw error;
+  }
+};
+
+/**
+ * Delete an application
+ */
+export const deleteJob = async (uid, jobId) => {
+  try {
+    const jobRef = doc(
+      db,
+      "users",
+      uid,
+      "applications",
+      jobId
+    );
+
+    await deleteDoc(jobRef);
+  } catch (error) {
+    console.error("Error deleting application:", error);
     throw error;
   }
 };
