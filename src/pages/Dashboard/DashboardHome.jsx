@@ -6,7 +6,7 @@ import RecentApplications from "../../components/Dashboard/RecentApplications";
 import UpcomingInterviews from "../../components/Dashboard/UpcomingInterviews";
 
 import { useAuth } from "../../context/AuthContext";
-import { getDashboardStats } from "../../services/jobService";
+import { getAnalyticsData } from "../../services/jobService";
 function DashboardHome() {
   const { user } = useAuth();
 
@@ -23,8 +23,8 @@ function DashboardHome() {
       if (!user) return;
 
       try {
-        const data = await getDashboardStats(user.uid);
-        setStats(data);
+        const dashboardStat = await getAnalyticsData(user.uid);
+        setStats(dashboardStat);
       } catch (error) {
         console.error("Error loading dashboard stats:", error);
       }

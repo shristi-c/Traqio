@@ -98,6 +98,13 @@ const sortedApplications = [...filteredApplications].sort((a, b) => {
       );
   }
 });
+const clearFilters = () => {
+  setSearchTerm("");
+  setStatusFilter("All");
+  setJobTypeFilter("All");
+  setLocationFilter("All");
+  setSortOption("Newest");
+};
 
   const handleDelete = async (jobId) => {
   const confirmDelete = window.confirm(
@@ -131,59 +138,121 @@ const sortedApplications = [...filteredApplications].sort((a, b) => {
 
 return (
   <div className="space-y-6">
-
+<div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
+ <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
+    {/* Search */}
     <input
       type="text"
       placeholder="Search by company or job title..."
       value={searchTerm}
       onChange={(e) => setSearchTerm(e.target.value)}
-      className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 xl:col-span-2"
     />
+  {/* Status */}
 <select
-  value={jobTypeFilter}
-  onChange={(e) => setJobTypeFilter(e.target.value)}
-  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+  value={statusFilter}
+  onChange={(e) => setStatusFilter(e.target.value)}
+  className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
 >
-  <option value="All">All Job Types</option>
-  <option value="Full Time">Full Time</option>
-  <option value="Internship">Internship</option>
-  <option value="Part Time">Part Time</option>
-  <option value="Contract">Contract</option>
+  <option value="All">All Statuses</option>
+  <option value="Applied">Applied</option>
+  <option value="Interview">Interview</option>
+  <option value="Assessment">Assessment</option>
+  <option value="Offer">Offer</option>
+  <option value="Rejected">Rejected</option>
 </select>
 
-<select
-  value={locationFilter}
-  onChange={(e) => setLocationFilter(e.target.value)}
-  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
->
-  {locations.map((location) => (
-    <option key={location} value={location}>
-      {location === "All" ? "All Locations" : location}
-    </option>
-  ))}
-</select>
-<select
-  value={sortOption}
-  onChange={(e) => setSortOption(e.target.value)}
-  className="w-full rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
->
-  <option value="Newest">Newest First</option>
-  <option value="Oldest">Oldest First</option>
-  <option value="Company">Company Name</option>
-  <option value="Applied Date">Applied Date</option>
-</select>
+    {/* Job Type */}
+    <select
+      value={jobTypeFilter}
+      onChange={(e) => setJobTypeFilter(e.target.value)}
+      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="All">All Job Types</option>
+      <option value="Full Time">Full Time</option>
+      <option value="Internship">Internship</option>
+      <option value="Part Time">Part Time</option>
+      <option value="Contract">Contract</option>
+    </select>
 
-    <div className="grid gap-6">
-     {sortedApplications.map((application) => (
-        <ApplicationCard
-          key={application.id}
-          application={application}
-          onDelete={handleDelete}
-        />
+    {/* Location */}
+    <select
+      value={locationFilter}
+      onChange={(e) => setLocationFilter(e.target.value)}
+      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      {locations.map((location) => (
+        <option key={location} value={location}>
+          {location === "All" ? "All Locations" : location}
+        </option>
       ))}
-    </div>
+    </select>
+
+    {/* Sort */}
+    <select
+      value={sortOption}
+      onChange={(e) => setSortOption(e.target.value)}
+      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
+    >
+      <option value="Newest">Newest First</option>
+      <option value="Oldest">Oldest First</option>
+      <option value="Company">Company Name</option>
+      <option value="Applied Date">Applied Date</option>
+    </select>
 
   </div>
+</div>
+
+  
+
+<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <p className="text-sm text-gray-600">
+    Showing{" "}
+    <span className="font-semibold">
+      {sortedApplications.length}
+    </span>{" "}
+    application{sortedApplications.length !== 1 ? "s" : ""}
+  </p>
+
+  <button
+    onClick={clearFilters}
+    className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium transition hover:bg-gray-100"
+  >
+    Clear Filters
+  </button>
+</div>
+
+{sortedApplications.length === 0 ? (
+  <div className="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center">
+    <h3 className="text-lg font-semibold text-gray-800">
+      No applications found
+    </h3>
+
+    <p className="mt-2 text-gray-500">
+      Try changing your search or filters.
+    </p>
+
+    <button
+      onClick={clearFilters}
+      className="mt-6 rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700"
+    >
+      Clear Filters
+    </button>
+  </div>
+) : (
+  <div className="grid gap-6">
+    {sortedApplications.map((application) => (
+      <ApplicationCard
+        key={application.id}
+        application={application}
+        onDelete={handleDelete}
+      />
+    ))}
+  </div>
+)}
+</div>
+
+  
 );
 }
 

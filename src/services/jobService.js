@@ -144,9 +144,9 @@ export const deleteJob = async (uid, jobId) => {
 };
 
 /**
- * Fetch dashboard statistics
+ * Fetch analytics data
  */
-export const getDashboardStats = async (uid) => {
+export const getAnalyticsData = async (uid) => {
   try {
     const applications = await getJobs(uid);
 
@@ -173,15 +173,64 @@ export const getDashboardStats = async (uid) => {
               100
           );
 
+    /* -----------------------------
+       Status Distribution
+    ------------------------------*/
+
+    const statusCounts = {};
+
+    applications.forEach((job) => {
+      const status = job.status || "Unknown";
+
+      statusCounts[status] =
+        (statusCounts[status] || 0) + 1;
+    });
+
+    const statusDistribution = Object.entries(
+      statusCounts
+    ).map(([name, value]) => ({
+      name,
+      value,
+    }));
+
+    /* -----------------------------
+       Monthly Applications
+    ------------------------------*/
+
+    const monthlyCounts = {};
+
+    applications.forEach((job) => {
+      if (!job.appliedDate) return;
+
+      const date = new Date(job.appliedDate);
+
+      const month = date.toLocaleString("default", {
+        month: "short",
+        year: "numeric",
+      });
+
+      monthlyCounts[month] =
+        (monthlyCounts[month] || 0) + 1;
+    });
+
+    const monthlyApplications = Object.entries(
+      monthlyCounts
+    ).map(([month, applications]) => ({
+      month,
+      applications,
+    }));
+
     return {
       totalApplications,
       interviews,
       offers,
       rejections,
       responseRate,
+      statusDistribution,
+      monthlyApplications,
     };
   } catch (error) {
-    console.error("Error fetching dashboard stats:", error);
+    console.error("Error fetching analytics data:", error);
     throw error;
   }
 };
