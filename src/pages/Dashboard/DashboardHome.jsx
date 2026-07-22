@@ -4,7 +4,6 @@ import WelcomeBanner from "../../components/Dashboard/WelcomeBanner";
 import StatsGrid from "../../components/Dashboard/StatsGrid";
 import RecentApplications from "../../components/Dashboard/RecentApplications";
 import UpcomingInterviews from "../../components/Dashboard/UpcomingInterviews";
-
 import { useAuth } from "../../context/AuthContext";
 import { getAnalyticsData } from "../../services/jobService";
 function DashboardHome() {
@@ -36,10 +35,12 @@ function DashboardHome() {
     <div className="space-y-8">
       <WelcomeBanner />
 <StatsGrid stats={stats} />
+  
+    <UpcomingInterviews />
 
       <RecentApplications />
 
-      <UpcomingInterviews />
+      
     </div>
   );
 }

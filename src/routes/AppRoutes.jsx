@@ -11,12 +11,15 @@ import Applications from "../pages/Application/Applications";
 import NewApplication from "../pages/Application/NewApplication";
 import Analytics from "../pages/Analytics/Analytics";
 import Interviews from "../pages/Interviews/Interviews";
+import NewInterview from "../pages/Interviews/NewInterview";
+import EditInterview from "../pages/Interviews/EditInterview";
 import Profile from "../pages/Profile/Profile";
 import Settings from "../pages/Settings/Settings";
 import PublicRoute from "../components/Common/PublicRoute";
 import ProtectedRoute from "../components/Common/ProtectedRoute";
 import ApplicationDetails from "../pages/Application/ApplicationDetails";
 import EditApplication from "../pages/Application/EditApplication";
+
 
 function AppRoutes() {
   return (
@@ -90,6 +93,15 @@ function AppRoutes() {
 <Route
   path="interviews"
   element={<Interviews />}
+/>
+<Route
+  path="interviews/new"
+  element={<NewInterview />}
+/>
+
+<Route
+  path="interviews/:id/edit"
+  element={<EditInterview />}
 />
 
 <Route

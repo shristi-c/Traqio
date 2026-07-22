@@ -148,3 +148,36 @@ export const deleteInterview = async (
     throw error;
   }
 };
+/**
+ * Get Upcoming Interviews
+ */
+export const getUpcomingInterviews = async (uid) => {
+  try {
+    const interviews = await getInterviews(uid);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return interviews
+      .filter((interview) => {
+        if (!interview.interviewDate) return false;
+
+        const interviewDate = new Date(interview.interviewDate);
+        interviewDate.setHours(0, 0, 0, 0);
+
+        return (
+          interviewDate >= today &&
+          interview.status === "Scheduled"
+        );
+      })
+      .sort(
+        (a, b) =>
+          new Date(a.interviewDate) -
+          new Date(b.interviewDate)
+      )
+      .slice(0, 5);
+  } catch (error) {
+    console.error("Error fetching upcoming interviews:", error);
+    throw error;
+  }
+};
