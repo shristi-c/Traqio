@@ -39,12 +39,29 @@ function Analytics() {
       </div>
     );
   }
+  if (
+  !analytics ||
+  analytics.totalApplications === 0
+) {
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-10 text-center shadow-sm">
+      <h2 className="text-2xl font-semibold text-gray-800">
+        No Analytics Available
+      </h2>
+
+      <p className="mt-3 text-gray-500">
+        Add your first job application to start
+        tracking your progress.
+      </p>
+    </div>
+  );
+}
 
   return (
-    <div className="space-y-8">
+   <div className="space-y-6 sm:space-y-8">
 
       <div>
-        <h1 className="text-3xl font-bold">
+        <h1 className="text-2xl font-bold sm:text-3xl">
           Analytics
         </h1>
 
@@ -55,7 +72,7 @@ function Analytics() {
 
       <MetricsGrid analytics={analytics} />
 
-      <div className="grid gap-6 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
 
         <StatusPieChart
           data={analytics.statusDistribution}

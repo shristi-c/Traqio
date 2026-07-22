@@ -213,12 +213,17 @@ export const getAnalyticsData = async (uid) => {
         (monthlyCounts[month] || 0) + 1;
     });
 
-    const monthlyApplications = Object.entries(
-      monthlyCounts
-    ).map(([month, applications]) => ({
-      month,
-      applications,
-    }));
+    const monthlyApplications = Object.entries(monthlyCounts)
+  .map(([month, applications]) => ({
+    month,
+    applications,
+    date: new Date(month),
+  }))
+  .sort((a, b) => a.date - b.date)
+  .map(({ month, applications }) => ({
+    month,
+    applications,
+  }));
 
     return {
       totalApplications,
