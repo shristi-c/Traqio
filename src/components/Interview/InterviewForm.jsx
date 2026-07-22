@@ -1,21 +1,10 @@
-import { useState } from "react";
-
 function InterviewForm({
-  initialData = {},
+  formData,
+  setFormData,
   onSubmit,
-  submitText = "Save Interview",
+  submitButtonText = "Save Interview",
+  onCancel,
 }) {
-  const [formData, setFormData] = useState({
-    company: initialData.company || "",
-    jobTitle: initialData.jobTitle || "",
-    interviewDate: initialData.interviewDate || "",
-    interviewTime: initialData.interviewTime || "",
-    interviewType: initialData.interviewType || "Online",
-    interviewRound: initialData.interviewRound || "",
-    status: initialData.status || "Scheduled",
-    notes: initialData.notes || "",
-  });
-
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -23,18 +12,12 @@ function InterviewForm({
     }));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
   return (
     <form
-      onSubmit={handleSubmit}
-      className="space-y-6 rounded-xl border border-gray-200 bg-white p-4 sm:p-6 shadow-sm"
+      onSubmit={onSubmit}
+      className="space-y-6 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:p-6"
     >
       {/* Company */}
-
       <div>
         <label className="mb-2 block font-medium">
           Company
@@ -51,7 +34,6 @@ function InterviewForm({
       </div>
 
       {/* Job Title */}
-
       <div>
         <label className="mb-2 block font-medium">
           Job Title
@@ -68,9 +50,7 @@ function InterviewForm({
       </div>
 
       {/* Date & Time */}
-
       <div className="grid gap-6 md:grid-cols-2">
-
         <div>
           <label className="mb-2 block font-medium">
             Interview Date
@@ -100,13 +80,10 @@ function InterviewForm({
             className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
       </div>
 
       {/* Type & Round */}
-
       <div className="grid gap-6 md:grid-cols-2">
-
         <div>
           <label className="mb-2 block font-medium">
             Interview Type
@@ -132,17 +109,15 @@ function InterviewForm({
           <input
             type="text"
             name="interviewRound"
-            placeholder="Technical Round 1"
             value={formData.interviewRound}
             onChange={handleChange}
+            placeholder="Technical Round 1"
             className="w-full rounded-lg border border-gray-300 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
-
       </div>
 
       {/* Status */}
-
       <div>
         <label className="mb-2 block font-medium">
           Status
@@ -161,7 +136,6 @@ function InterviewForm({
       </div>
 
       {/* Notes */}
-
       <div>
         <label className="mb-2 block font-medium">
           Notes
@@ -176,14 +150,25 @@ function InterviewForm({
         />
       </div>
 
-      {/* Button */}
+      {/* Buttons */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+        {onCancel && (
+          <button
+            type="button"
+            onClick={onCancel}
+            className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-100"
+          >
+            Cancel
+          </button>
+        )}
 
-      <button
-        type="submit"
-        className="w-full rounded-lg bg-blue-600 py-3 font-semibold text-white transition hover:bg-blue-700"
-      >
-        {submitText}
-      </button>
+        <button
+          type="submit"
+          className="rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white transition hover:bg-blue-700"
+        >
+          {submitButtonText}
+        </button>
+      </div>
     </form>
   );
 }

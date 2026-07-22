@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
 
+import { useAuth } from "../../context/AuthContext";
 import InterviewForm from "../../components/Interview/InterviewForm";
 import { addInterview } from "../../services/interviewService";
 
@@ -8,7 +9,20 @@ function NewInterview() {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (formData) => {
+  const [formData, setFormData] = useState({
+    company: "",
+    jobTitle: "",
+    interviewDate: "",
+    interviewTime: "",
+    interviewType: "Online",
+    interviewRound: "",
+    status: "Scheduled",
+    notes: "",
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
     try {
       await addInterview(user.uid, formData);
 
@@ -19,6 +33,10 @@ function NewInterview() {
       console.error(error);
       alert("Failed to schedule interview.");
     }
+  };
+
+  const handleCancel = () => {
+    navigate("/dashboard/interviews");
   };
 
   return (
@@ -34,8 +52,11 @@ function NewInterview() {
       </div>
 
       <InterviewForm
+        formData={formData}
+        setFormData={setFormData}
         onSubmit={handleSubmit}
-        submitText="Schedule Interview"
+        onCancel={handleCancel}
+        submitButtonText="Schedule Interview"
       />
     </div>
   );

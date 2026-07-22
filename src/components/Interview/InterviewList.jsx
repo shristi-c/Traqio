@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { useAuth } from "../../context/AuthContext";
 import {
   getInterviews,
@@ -6,6 +7,7 @@ import {
 } from "../../services/interviewService";
 
 import InterviewCard from "./InterviewCard";
+import EmptyState from "../../pages/Application/EmptyState";
 
 function InterviewList() {
   const { user } = useAuth();
@@ -14,43 +16,46 @@ function InterviewList() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchInterviews = async () => {
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const data = await getInterviews(user.uid);
-        setInterviews(data);
-      } catch (error) {
-        console.error("Failed to fetch interviews:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    if (!user) return;
 
     fetchInterviews();
   }, [user]);
 
+  const fetchInterviews = async () => {
+    try {
+      setLoading(true);
+
+      const data = await getInterviews(user.uid);
+
+      setInterviews(data);
+    } catch (error) {
+      console.error("Error fetching interviews:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleDelete = async (id) => {
-    if (!window.confirm("Delete this interview?")) return;
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this interview?"
+    );
+
+    if (!confirmDelete) return;
 
     try {
       await deleteInterview(user.uid, id);
 
       setInterviews((prev) =>
-        prev.filter((item) => item.id !== id)
+        prev.filter((interview) => interview.id !== id)
       );
     } catch (error) {
-      console.error(error);
-      alert("Failed to delete interview.");
+      console.error("Error deleting interview:", error);
     }
   };
 
   if (loading) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm text-center">
+      <div className="py-10 text-center text-gray-500">
         Loading interviews...
       </div>
     );
@@ -58,14 +63,15 @@ function InterviewList() {
 
   if (interviews.length === 0) {
     return (
-      <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm text-center">
-        No interviews scheduled.
-      </div>
+      <EmptyState
+        title="No Interviews Scheduled"
+        description="Start by adding your first interview."
+      />
     );
   }
 
   return (
-    <div className="space-y-6">
+    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {interviews.map((interview) => (
         <InterviewCard
           key={interview.id}

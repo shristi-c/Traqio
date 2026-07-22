@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-// import InterviewList from "../../components/Interview/InterviewList";
+import InterviewList from "../../components/Interview/InterviewList";
 
 function Interviews() {
   return (
@@ -17,7 +17,7 @@ function Interviews() {
 
         <Link
           to="/dashboard/interviews/new"
-          className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white hover:bg-blue-700"
+          className="rounded-lg bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-700"
         >
           + Schedule Interview
         </Link>
