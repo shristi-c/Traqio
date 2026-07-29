@@ -9,13 +9,11 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import Badge from "../../components/Common/Badge";
+import Badge from "../Common/Badge";
+import Button from "../Common/Button";
 
-const statusVariants = {
-  Scheduled: "indigo",
-  Completed: "green",
-  Cancelled: "red",
-};
+
+
 
 const typeIcons = {
   Online: <FaVideo className="text-blue-500" />,
@@ -64,10 +62,7 @@ const InterviewCard = ({ interview, onDelete }) => {
           </div>
         </div>
 
-        <Badge
-  text={status}
-  variant={statusVariants[status]}
-/>
+       <Badge text={status} />
       </div>
 
       {/* Details */}
@@ -96,27 +91,23 @@ const InterviewCard = ({ interview, onDelete }) => {
       </div>
 
       {/* Footer */}
-      <div className="mt-6 flex justify-end gap-2 border-t pt-4">
-        <button
-          onClick={() =>
-            navigate(
-              `/dashboard/interviews/${interview.id}/edit`
-            )
-          }
-          className="rounded-lg p-2 text-yellow-600 transition hover:bg-yellow-50"
-          title="Edit"
-        >
-          <FaEdit />
-        </button>
+     <div className="mt-6 flex justify-end gap-2 border-t pt-4">
+  <Button
+    size="icon"
+    variant="iconWarning"
+    icon={<FaEdit />}
+    onClick={() =>
+      navigate(`/dashboard/interviews/${interview.id}/edit`)
+    }
+  />
 
-        <button
-          onClick={() => onDelete(interview.id)}
-          className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
-          title="Delete"
-        >
-          <FaTrash />
-        </button>
-      </div>
+  <Button
+    size="icon"
+    variant="iconDanger"
+    icon={<FaTrash />}
+    onClick={() => onDelete(interview.id)}
+  />
+</div>
     </div>
   );
 };

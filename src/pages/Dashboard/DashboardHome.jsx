@@ -6,6 +6,7 @@ import RecentApplications from "../../components/Dashboard/RecentApplications";
 import UpcomingInterviews from "../../components/Dashboard/UpcomingInterviews";
 import { useAuth } from "../../context/AuthContext";
 import { getAnalyticsData } from "../../services/jobService";
+import QuickActions from "../../components/Dashboard/QuickActions";
 function DashboardHome() {
   const { user } = useAuth();
 
@@ -35,7 +36,9 @@ function DashboardHome() {
     <div className="space-y-8">
       <WelcomeBanner />
 <StatsGrid stats={stats} />
-  
+
+  <QuickActions />
+
     <UpcomingInterviews />
 
       <RecentApplications />

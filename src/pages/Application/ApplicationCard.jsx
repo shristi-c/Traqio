@@ -9,6 +9,8 @@ import {
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Badge from "../../components/Common/Badge";
+import Button from "../../components/Common/Button";
+import Card from "../../components/Common/Card";
 
 
 const ApplicationCard = ({ application, onDelete }) => {
@@ -20,13 +22,7 @@ const ApplicationCard = ({ application, onDelete }) => {
     appliedDate,
   } = application;
   
-  const statusVariants = {
-  Applied: "blue",
-  Interview: "yellow",
-  Assessment: "purple",
-  Offer: "green",
-  Rejected: "red",
-};
+ 
   const navigate = useNavigate();
 
   const formattedDate = appliedDate
@@ -38,7 +34,7 @@ const ApplicationCard = ({ application, onDelete }) => {
     : "Not specified";
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-lg">
+    <Card>
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-4">
@@ -57,10 +53,7 @@ const ApplicationCard = ({ application, onDelete }) => {
           </div>
         </div>
 
-     <Badge
-  text={status}
-  variant={statusVariants[status]}
-/>
+    <Badge text={status} />
       </div>
 
       {/* Details */}
@@ -76,35 +69,34 @@ const ApplicationCard = ({ application, onDelete }) => {
         </div>
       </div>
 
-      {/* Footer */}
-      <div className="mt-6 flex justify-end gap-2 border-t pt-4">
-        <button
-  onClick={() => navigate(`/dashboard/applications/${application.id}`)}
-  className="rounded-lg p-2 text-blue-600 transition hover:bg-blue-50"
-  title="View"
->
-  <FaEye />
-</button>
+    {/* Footer */}
+<div className="mt-6 flex justify-end gap-2 border-t pt-4">
+  <Button
+    size="icon"
+    variant="iconPrimary"
+    icon={<FaEye />}
+    onClick={() =>
+      navigate(`/dashboard/applications/${application.id}`)
+    }
+  />
 
-        <button
-  onClick={() =>
-    navigate(`/dashboard/applications/${application.id}/edit`)
-  }
-  className="rounded-lg p-2 text-yellow-600 transition hover:bg-yellow-50"
-  title="Edit"
->
-  <FaEdit />
-</button>
+  <Button
+    size="icon"
+    variant="iconWarning"
+    icon={<FaEdit />}
+    onClick={() =>
+      navigate(`/dashboard/applications/${application.id}/edit`)
+    }
+  />
 
-       <button
-  onClick={() => onDelete(application.id)}
-  className="rounded-lg p-2 text-red-600 transition hover:bg-red-50"
-  title="Delete"
->
-  <FaTrash />
-</button>
-      </div>
-    </div>
+  <Button
+    size="icon"
+    variant="iconDanger"
+    icon={<FaTrash />}
+    onClick={() => onDelete(application.id)}
+  />
+</div>
+   </Card>
   );
 };
 
