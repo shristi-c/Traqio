@@ -9,11 +9,12 @@ import {
   FaMapMarkerAlt,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Badge from "../../components/Common/Badge";
 
-const statusStyles = {
-  Scheduled: "bg-blue-100 text-blue-700",
-  Completed: "bg-green-100 text-green-700",
-  Cancelled: "bg-red-100 text-red-700",
+const statusVariants = {
+  Scheduled: "indigo",
+  Completed: "green",
+  Cancelled: "red",
 };
 
 const typeIcons = {
@@ -63,14 +64,10 @@ const InterviewCard = ({ interview, onDelete }) => {
           </div>
         </div>
 
-        <span
-          className={`rounded-full px-3 py-1 text-sm font-medium ${
-            statusStyles[status] ||
-            "bg-gray-100 text-gray-700"
-          }`}
-        >
-          {status}
-        </span>
+        <Badge
+  text={status}
+  variant={statusVariants[status]}
+/>
       </div>
 
       {/* Details */}

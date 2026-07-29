@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { useAuth } from "../../context/AuthContext";
 import InterviewForm from "../../components/Interview/InterviewForm";
+import PageHeader from "../../components/PageHeader/PageHeader";
 
 import {
   getInterviewById,
@@ -76,23 +77,20 @@ function EditInterview() {
 
   if (loading) {
     return (
-      <div className="p-8 text-center">
-        Loading interview...
-      </div>
+     <div className="flex h-64 items-center justify-center">
+  <p className="text-gray-500">
+    Loading interview...
+  </p>
+</div>
     );
   }
 
   return (
     <div className="mx-auto max-w-4xl space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold">
-          Edit Interview
-        </h1>
-
-        <p className="mt-2 text-gray-500">
-          Update your interview details.
-        </p>
-      </div>
+     <PageHeader
+  title="Edit Interview"
+  subtitle="Update your interview details."
+/>
 
       <InterviewForm
         formData={formData}

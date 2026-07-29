@@ -8,14 +8,8 @@ import {
   FaBuilding,
 } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Badge from "../../components/Common/Badge";
 
-const statusStyles = {
-  Applied: "bg-blue-100 text-blue-700",
-  Interview: "bg-yellow-100 text-yellow-700",
-  Assessment: "bg-purple-100 text-purple-700",
-  Offer: "bg-green-100 text-green-700",
-  Rejected: "bg-red-100 text-red-700",
-};
 
 const ApplicationCard = ({ application, onDelete }) => {
   const {
@@ -26,6 +20,13 @@ const ApplicationCard = ({ application, onDelete }) => {
     appliedDate,
   } = application;
   
+  const statusVariants = {
+  Applied: "blue",
+  Interview: "yellow",
+  Assessment: "purple",
+  Offer: "green",
+  Rejected: "red",
+};
   const navigate = useNavigate();
 
   const formattedDate = appliedDate
@@ -56,14 +57,10 @@ const ApplicationCard = ({ application, onDelete }) => {
           </div>
         </div>
 
-        <span
-          className={`rounded-full px-3 py-1 text-sm font-medium ${
-            statusStyles[status] ||
-            "bg-gray-100 text-gray-700"
-          }`}
-        >
-          {status}
-        </span>
+     <Badge
+  text={status}
+  variant={statusVariants[status]}
+/>
       </div>
 
       {/* Details */}

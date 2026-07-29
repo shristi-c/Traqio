@@ -8,12 +8,17 @@ import {
 
 import InterviewCard from "./InterviewCard";
 import EmptyState from "../../pages/Application/EmptyState";
+import InterviewToolbar from "./InterviewToolbar";
 
 function InterviewList() {
   const { user } = useAuth();
 
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
+const [status, setStatus] = useState("All");
+const [type, setType] = useState("All");
+const [sort, setSort] = useState("newest");
 
   useEffect(() => {
     if (!user) return;
@@ -71,6 +76,18 @@ function InterviewList() {
   }
 
   return (
+  <div className="space-y-6">
+    <InterviewToolbar
+      search={search}
+      setSearch={setSearch}
+      status={status}
+      setStatus={setStatus}
+      type={type}
+      setType={setType}
+      sort={sort}
+      setSort={setSort}
+    />
+
     <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
       {interviews.map((interview) => (
         <InterviewCard
@@ -80,7 +97,9 @@ function InterviewList() {
         />
       ))}
     </div>
-  );
+  </div>
+);
+
 }
 
 export default InterviewList;
