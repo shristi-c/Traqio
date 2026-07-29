@@ -7,18 +7,20 @@ import {
 } from "../../services/interviewService";
 
 import InterviewCard from "./InterviewCard";
-import EmptyState from "../../pages/Application/EmptyState";
 import InterviewToolbar from "./InterviewToolbar";
+import EmptyState from "../../pages/Application/EmptyState";
 
 function InterviewList() {
   const { user } = useAuth();
 
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Search, Filter & Sort States
   const [search, setSearch] = useState("");
-const [status, setStatus] = useState("All");
-const [type, setType] = useState("All");
-const [sort, setSort] = useState("newest");
+  const [status, setStatus] = useState("All");
+  const [type, setType] = useState("All");
+  const [sort, setSort] = useState("newest");
 
   useEffect(() => {
     if (!user) return;
@@ -58,6 +60,54 @@ const [sort, setSort] = useState("newest");
     }
   };
 
+  // Search + Filter + Sort
+  const filteredInterviews = interviews
+    .filter((interview) => {
+      const matchesSearch =
+        interview.company
+          ?.toLowerCase()
+          .includes(search.toLowerCase()) ||
+        interview.jobTitle
+          ?.toLowerCase()
+          .includes(search.toLowerCase());
+
+      const matchesStatus =
+        status === "All" ||
+        interview.status === status;
+
+      const matchesType =
+        type === "All" ||
+        interview.interviewType === type;
+
+      return (
+        matchesSearch &&
+        matchesStatus &&
+        matchesType
+      );
+    })
+    .sort((a, b) => {
+      switch (sort) {
+        case "oldest":
+          return (
+            new Date(a.interviewDate) -
+            new Date(b.interviewDate)
+          );
+
+        case "company-asc":
+          return a.company.localeCompare(b.company);
+
+        case "company-desc":
+          return b.company.localeCompare(a.company);
+
+        case "newest":
+        default:
+          return (
+            new Date(b.interviewDate) -
+            new Date(a.interviewDate)
+          );
+      }
+    });
+
   if (loading) {
     return (
       <div className="py-10 text-center text-gray-500">
@@ -66,40 +116,49 @@ const [sort, setSort] = useState("newest");
     );
   }
 
+  // No interviews in database
   if (interviews.length === 0) {
     return (
       <EmptyState
         title="No Interviews Scheduled"
         description="Start by adding your first interview."
+        buttonText="+ Schedule Interview"
+        buttonLink="/dashboard/interviews/new"
       />
     );
   }
 
   return (
-  <div className="space-y-6">
-    <InterviewToolbar
-      search={search}
-      setSearch={setSearch}
-      status={status}
-      setStatus={setStatus}
-      type={type}
-      setType={setType}
-      sort={sort}
-      setSort={setSort}
-    />
+    <div className="space-y-6">
+      <InterviewToolbar
+        search={search}
+        setSearch={setSearch}
+        status={status}
+        setStatus={setStatus}
+        type={type}
+        setType={setType}
+        sort={sort}
+        setSort={setSort}
+      />
 
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {interviews.map((interview) => (
-        <InterviewCard
-          key={interview.id}
-          interview={interview}
-          onDelete={handleDelete}
+      {filteredInterviews.length === 0 ? (
+        <EmptyState
+          title="No Interviews Found"
+          description="Try changing your search or filters."
         />
-      ))}
+      ) : (
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          {filteredInterviews.map((interview) => (
+            <InterviewCard
+              key={interview.id}
+              interview={interview}
+              onDelete={handleDelete}
+            />
+          ))}
+        </div>
+      )}
     </div>
-  </div>
-);
-
+  );
 }
 
 export default InterviewList;

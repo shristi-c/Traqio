@@ -4,6 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import ApplicationCard from "./ApplicationCard";
 import EmptyState from "./EmptyState";
 import { deleteJob } from "../../services/jobService";
+import ApplicationToolbar from "../../components/Application/ApplicationToolbar";
 
 
 function ApplicationList() {
@@ -138,70 +139,20 @@ const clearFilters = () => {
 
 return (
   <div className="space-y-6">
-<div className="rounded-xl border border-gray-200 bg-white p-4 shadow-sm">
- <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-5">
-    {/* Search */}
-    <input
-      type="text"
-      placeholder="Search by company or job title..."
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.target.value)}
-      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500 xl:col-span-2"
-    />
-  {/* Status */}
-<select
-  value={statusFilter}
-  onChange={(e) => setStatusFilter(e.target.value)}
-  className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
->
-  <option value="All">All Statuses</option>
-  <option value="Applied">Applied</option>
-  <option value="Interview">Interview</option>
-  <option value="Assessment">Assessment</option>
-  <option value="Offer">Offer</option>
-  <option value="Rejected">Rejected</option>
-</select>
-
-    {/* Job Type */}
-    <select
-      value={jobTypeFilter}
-      onChange={(e) => setJobTypeFilter(e.target.value)}
-      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      <option value="All">All Job Types</option>
-      <option value="Full Time">Full Time</option>
-      <option value="Internship">Internship</option>
-      <option value="Part Time">Part Time</option>
-      <option value="Contract">Contract</option>
-    </select>
-
-    {/* Location */}
-    <select
-      value={locationFilter}
-      onChange={(e) => setLocationFilter(e.target.value)}
-      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      {locations.map((location) => (
-        <option key={location} value={location}>
-          {location === "All" ? "All Locations" : location}
-        </option>
-      ))}
-    </select>
-
-    {/* Sort */}
-    <select
-      value={sortOption}
-      onChange={(e) => setSortOption(e.target.value)}
-      className="rounded-lg border border-gray-300 px-4 py-3 outline-none focus:ring-2 focus:ring-blue-500"
-    >
-      <option value="Newest">Newest First</option>
-      <option value="Oldest">Oldest First</option>
-      <option value="Company">Company Name</option>
-      <option value="Applied Date">Applied Date</option>
-    </select>
-
-  </div>
-</div>
+  <ApplicationToolbar
+  searchTerm={searchTerm}
+  setSearchTerm={setSearchTerm}
+  statusFilter={statusFilter}
+  setStatusFilter={setStatusFilter}
+  jobTypeFilter={jobTypeFilter}
+  setJobTypeFilter={setJobTypeFilter}
+  locationFilter={locationFilter}
+  setLocationFilter={setLocationFilter}
+  sortOption={sortOption}
+  setSortOption={setSortOption}
+  locations={locations}
+  clearFilters={clearFilters}
+/>
 
   
 
@@ -214,12 +165,7 @@ return (
     application{sortedApplications.length !== 1 ? "s" : ""}
   </p>
 
-  <button
-    onClick={clearFilters}
-    className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium transition hover:bg-gray-100"
-  >
-    Clear Filters
-  </button>
+
 </div>
 
 {sortedApplications.length === 0 ? (
