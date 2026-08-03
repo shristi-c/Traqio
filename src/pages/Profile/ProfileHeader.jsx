@@ -1,0 +1,33 @@
+import { FaUserCircle, FaEdit } from "react-icons/fa";
+
+function ProfileHeader({ user, onEdit }) {
+  return (
+    <div className="rounded-2xl border bg-white p-6 shadow-sm">
+      <div className="flex flex-col items-center gap-6 md:flex-row md:justify-between">
+        <div className="flex items-center gap-5">
+          <FaUserCircle className="text-7xl text-blue-600" />
+
+          <div>
+            <h1 className="text-3xl font-bold">
+              {user?.name || "User"}
+            </h1>
+
+            <p className="text-gray-500">
+              {user?.email}
+            </p>
+          </div>
+        </div>
+
+        <button
+          onClick={onEdit}
+          className="flex items-center gap-2 rounded-lg bg-blue-600 px-5 py-3 text-white hover:bg-blue-700"
+        >
+          <FaEdit />
+          Edit Profile
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default ProfileHeader;

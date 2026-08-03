@@ -4,9 +4,14 @@ import WelcomeBanner from "../../components/Dashboard/WelcomeBanner";
 import StatsGrid from "../../components/Dashboard/StatsGrid";
 import RecentApplications from "../../components/Dashboard/RecentApplications";
 import UpcomingInterviews from "../../components/Dashboard/UpcomingInterviews";
+import QuickActions from "../../components/Dashboard/QuickActions";
+import DashboardSkeleton from "../../components/Dashboard/DashboardSkeleton";
+import GoalTracker from "../../components/Dashboard/GoalTtracker";
+import DashboardInsights from "../../components/Dashboard/DashboardInsights";
+
 import { useAuth } from "../../context/AuthContext";
 import { getAnalyticsData } from "../../services/jobService";
-import QuickActions from "../../components/Dashboard/QuickActions";
+
 function DashboardHome() {
   const { user } = useAuth();
 
@@ -18,32 +23,48 @@ function DashboardHome() {
     responseRate: 0,
   });
 
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
     const fetchStats = async () => {
       if (!user) return;
 
       try {
-        const dashboardStat = await getAnalyticsData(user.uid);
-        setStats(dashboardStat);
+        const dashboardStats = await getAnalyticsData(user.uid);
+        setStats(dashboardStats);
       } catch (error) {
         console.error("Error loading dashboard stats:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchStats();
   }, [user]);
+
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
+
   return (
     <div className="space-y-8">
       <WelcomeBanner />
-<StatsGrid stats={stats} />
 
-  <QuickActions />
+      <StatsGrid stats={stats} />
 
-    <UpcomingInterviews />
+      <QuickActions />
+
+      <div className="grid gap-8 lg:grid-cols-2">
+        <GoalTracker
+          totalApplications={stats.totalApplications}
+        />
+
+        <DashboardInsights stats={stats} />
+      </div>
+
+      <UpcomingInterviews />
 
       <RecentApplications />
-
-      
     </div>
   );
 }
