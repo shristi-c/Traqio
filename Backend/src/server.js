@@ -1,9 +1,8 @@
 import dotenv from "dotenv";
-import app from "./app.js";
-
 dotenv.config();
 
-// eslint-disable-next-line no-undef
+import app from "./app.js";
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {

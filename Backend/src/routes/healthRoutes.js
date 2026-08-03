@@ -1,13 +1,8 @@
 import { Router } from "express";
+import { healthCheck } from "../controllers/healthController.js";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "Traqio Backend Running 🚀",
-    timestamp: new Date(),
-  });
-});
+router.get("/", healthCheck);
 
 export default router;

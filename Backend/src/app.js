@@ -8,17 +8,12 @@ import errorHandler from "./middleware/errorHandler.js";
 const app = express();
 
 app.use(cors());
-
 app.use(express.json());
-
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api", routes);
 
-// 404 Middleware
 app.use(notFound);
-
-// Global Error Handler
 app.use(errorHandler);
 
 export default app;
