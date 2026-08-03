@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import ProfileHeader from "../../components/Profile/ProfileHeader";
-import ProfileForm from "../../components/profile/ProfileForm";
-import SkillsInput from "../../components/profile/SkillsInput";
-import SocialLinks from "../../components/profile/SocialLinks";
-import ResumeCard from "../../components/profile/ResumeCard";
+import ProfileForm from "../../components/Profile/ProfileForm";
+import SkillsInput from "../../components/Profile/SkillsInput";
+import SocialLinks from "../../components/Profile/SocialLinks";
+import ResumeCard from "../../components/Profile/ResumeCard";
 import ProfileCompletion from "../../components/Profile/ProfileCompletion";
 
 import { useAuth } from "../../context/AuthContext";
