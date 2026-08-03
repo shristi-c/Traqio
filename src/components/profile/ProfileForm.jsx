@@ -9,6 +9,7 @@ function ProfileForm({
   editMode,
   onSave,
   onCancel,
+  saving,
 }) {
   return (
     <SectionCard title="Personal Information">
@@ -76,12 +77,13 @@ function ProfileForm({
             Cancel
           </Button>
 
-          <Button
-            variant="primary"
-            onClick={onSave}
-          >
-            Save Changes
-          </Button>
+         <Button
+  variant="primary"
+  onClick={onSave}
+  disabled={saving}
+>
+  {saving ? "Saving..." : "Save Changes"}
+</Button>
         </div>
       )}
     </SectionCard>

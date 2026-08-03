@@ -5,6 +5,7 @@ import ProfileForm from "../../components/profile/ProfileForm";
 import SkillsInput from "../../components/profile/SkillsInput";
 import SocialLinks from "../../components/profile/SocialLinks";
 import ResumeCard from "../../components/profile/ResumeCard";
+import ProfileCompletion from "../../components/Profile/ProfileCompletion";
 
 import { useAuth } from "../../context/AuthContext";
 import {
@@ -34,6 +35,7 @@ function Profile() {
   const [skills, setSkills] = useState([]);
   const [loading, setLoading] = useState(true);
   const [editMode, setEditMode] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -86,23 +88,25 @@ function Profile() {
     setEditMode(false);
   };
 
-  const handleSave = async () => {
-    if (!user) return;
+const handleSave = async () => {
+  if (!user) return;
 
-    try {
-      await updateUserProfile(user.uid, {
-        ...formData,
-        skills,
-      });
+  setSaving(true);
 
-      setEditMode(false);
+  try {
+    await updateUserProfile(user.uid, {
+      ...formData,
+      skills,
+    });
 
-      alert("Profile updated successfully!");
-    } catch (error) {
-      console.error(error);
-      alert("Failed to update profile.");
-    }
-  };
+    setEditMode(false);
+  } catch (error) {
+    console.error(error);
+    alert("Failed to update profile.");
+  } finally {
+    setSaving(false);
+  }
+};
 
   if (loading) {
     return (
@@ -121,14 +125,16 @@ function Profile() {
         onEdit={handleEdit}
         editMode={editMode}
       />
+      <ProfileCompletion profile={{ ...formData, skills }} />
 
-      <ProfileForm
-        formData={formData}
-        handleChange={handleChange}
-        editMode={editMode}
-        onSave={handleSave}
-        onCancel={handleCancel}
-      />
+<ProfileForm
+  formData={formData}
+  handleChange={handleChange}
+  editMode={editMode}
+  onSave={handleSave}
+  onCancel={handleCancel}
+  saving={saving}
+/>
 
       <SkillsInput
         skills={skills}
