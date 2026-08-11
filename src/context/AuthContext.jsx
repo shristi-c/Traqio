@@ -10,25 +10,48 @@ export function AuthProvider({ children }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setLoading(true);
+  const getIdToken = async () => {
+  if (!user) {
+    return null;
+  }
 
-      if (currentUser) {
-        setUser(currentUser);
+  return await user.getIdToken();
+};
 
+
+ useEffect(() => {
+  console.log("AuthContext mounted");
+
+  const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    console.log("onAuthStateChanged fired");
+    console.log("Current User:", currentUser);
+
+    setLoading(true);
+
+    if (currentUser) {
+      console.log("User is logged in:", currentUser.uid);
+
+      setUser(currentUser);
+
+      try {
         const profile = await getUserProfile(currentUser.uid);
+        console.log("Profile:", profile);
         setUserData(profile);
-      } else {
-        setUser(null);
-        setUserData(null);
+      } catch (error) {
+        console.error("Error fetching profile:", error);
       }
+    } else {
+      console.log("No user logged in");
+      setUser(null);
+      setUserData(null);
+    }
 
-      setLoading(false);
-    });
+    console.log("Setting loading to false");
+    setLoading(false);
+  });
 
-    return () => unsubscribe();
-  }, []);
+  return () => unsubscribe();
+}, []);
 
   return (
     <AuthContext.Provider
@@ -36,6 +59,7 @@ export function AuthProvider({ children }) {
         user,
         userData,
         loading,
+        getIdToken,
       }}
     >
       {children}

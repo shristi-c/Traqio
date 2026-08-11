@@ -9,6 +9,7 @@ import DashboardSkeleton from "../../components/Dashboard/DashboardSkeleton";
 import GoalTracker from "../../components/Dashboard/GoalTtracker";
 import DashboardInsights from "../../components/Dashboard/DashboardInsights";
 
+
 import { useAuth } from "../../context/AuthContext";
 import { getAnalyticsData } from "../../services/jobService";
 
@@ -27,7 +28,11 @@ function DashboardHome() {
 
   useEffect(() => {
     const fetchStats = async () => {
-      if (!user) return;
+      // Stop loading if there is no logged-in user
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
       try {
         const dashboardStats = await getAnalyticsData(user.uid);
@@ -55,9 +60,7 @@ function DashboardHome() {
       <QuickActions />
 
       <div className="grid gap-8 lg:grid-cols-2">
-        <GoalTracker
-          totalApplications={stats.totalApplications}
-        />
+        <GoalTracker totalApplications={stats.totalApplications} />
 
         <DashboardInsights stats={stats} />
       </div>
@@ -65,6 +68,9 @@ function DashboardHome() {
       <UpcomingInterviews />
 
       <RecentApplications />
+
+      {/* Temporary component for getting Firebase ID Token */}
+      
     </div>
   );
 }
