@@ -1,11 +1,13 @@
 import { Router } from "express";
 import upload from "../middleware/uploadMiddleware.js";
 import { uploadResume } from "../controllers/resumeController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = Router();
 
 router.post(
   "/upload",
+  authMiddleware,
   upload.single("resume"),
   uploadResume
 );

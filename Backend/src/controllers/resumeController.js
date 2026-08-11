@@ -13,7 +13,9 @@ const uploadResume = async (req, res, next) => {
       );
     }
 
-    const resume = await processResumeUpload(req.file);
+   console.log("Authenticated User:", req.user);
+
+const resume = await processResumeUpload(req.file, req.user.uid);
 
     return res.status(200).json(
       new ApiResponse(
